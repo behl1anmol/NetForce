@@ -1,0 +1,10 @@
+﻿{
+    "profiles": {
+      "NetForce (Package)": {
+        "commandName": "MsixPackage"
+      },
+      "NetForce (Unpackaged)": {
+        "commandName": "Project"
+      }
+    }
+}
