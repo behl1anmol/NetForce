@@ -1,9 +1,8 @@
 pool:
   vmImage: 'windows-2022'
 
-
 variables:
-  solution: '$(Build.SourcesDirectory)/NetForce/NetForce/NetForce.sln'
+  solution: '$(Build.SourcesDirectory)/NetForce/NetForce.sln'
   buildPlatform: 'x64'
   buildConfiguration: 'Release'
 
