@@ -2,6 +2,7 @@ pool:
   name: 'Default'
   demands:
    - agent.name -equals DESKTOP-GSPVN3D-Win11
+   - agent.version -equals 2.206.1
 
 variables:
   solution: '$(Build.SourcesDirectory)/NetForce/NetForce.sln'
@@ -24,7 +25,6 @@ steps:
   inputs:
     restoreSolution: '$(solution)'
 
-# Failure here :D
 - task: VSBuild@1
   inputs:
     solution: '$(solution)'
