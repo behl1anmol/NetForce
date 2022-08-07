@@ -1,5 +1,5 @@
 pool:
-  vmImage: 'DESKTOP-GSPVN3D-Win11'
+  name: 'Default'
 
 variables:
   solution: '$(Build.SourcesDirectory)/NetForce/NetForce.sln'
