@@ -1,5 +1,7 @@
 pool:
   name: 'Default'
+  demands:
+   - agent.name -equals DESKTOP-GSPVN3D-Win11
 
 variables:
   solution: '$(Build.SourcesDirectory)/NetForce/NetForce.sln'
