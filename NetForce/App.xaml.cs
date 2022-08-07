@@ -64,7 +64,6 @@ public partial class App : Application
             services.AddSingleton<INavigationService, NavigationService>();
 
             // Core Services
-            services.AddSingleton<ISampleDataService, SampleDataService>();
             services.AddSingleton<IFileService, FileService>();
             services.AddSingleton<IDataService, DataService>();
             services.AddSingleton<ICommandService, CommandService>();
@@ -101,4 +100,11 @@ public partial class App : Application
 
         await App.GetService<IActivationService>().ActivateAsync(args);
     }
+    //protected override void OnLaunched(LaunchActivatedEventArgs args)
+    //{
+    //    _mWindow = new MainWindow();
+    //    _mWindow.Activate();
+    //    var mica = new MicaBackground(_mWindow);
+    //    mica.TrySetMicaBackdrop();
+    //}
 }

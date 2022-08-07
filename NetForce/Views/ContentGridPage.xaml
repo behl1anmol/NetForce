@@ -8,7 +8,6 @@
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:models="using:NetForce.Core.Models"
     mc:Ignorable="d">
-
     <Grid x:Name="ContentArea">
         <controls:AdaptiveGridView
             animations:Connected.ListItemElementName="itemThumbnail"
@@ -24,11 +23,16 @@
                 <DataTemplate x:DataType="models:TemplateModel">
                     <Grid
                         x:Name="itemThumbnail"
-                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}">
+                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                        Background="{ThemeResource CardBackgroundFillColorDefault}"
+                        CornerRadius="10"
+                        Margin="5">
                         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <!--<FontIcon
-                                Glyph="{x:Bind Symbol}"
-                                AutomationProperties.Name="{x:Bind SymbolName}" />-->
+                            <Image Source="/Assets/coding-file.png"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Width="46"
+                                        Height="46" />
                             <TextBlock
                                 Margin="{StaticResource XXSmallTopMargin}"
                                 HorizontalAlignment="Center"

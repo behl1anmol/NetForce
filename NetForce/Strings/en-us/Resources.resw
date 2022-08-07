@@ -68,7 +68,7 @@
     <value>Main</value>
   </data>
   <data name="Shell_ContentGrid.Content" xml:space="preserve">
-    <value>ContentGrid</value>
+    <value>Create a new project</value>
   </data>
   <data name="Settings_Personalization.Text" xml:space="preserve">
     <value>Personalization</value>
