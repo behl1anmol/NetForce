@@ -32,7 +32,8 @@ steps:
     SonarCloud: 'Sonar Cloud'
     organization: 'behl1anmol'
     scannerMode: 'MSBuild'
-    projectKey: 'Planner'
+    projectKey: 'behl1anmol_Planner'
+    projectName: 'Planner'
 
 - task: VSBuild@1
   inputs:
