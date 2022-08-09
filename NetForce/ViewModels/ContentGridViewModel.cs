@@ -14,24 +14,40 @@ namespace NetForce.ViewModels;
 public class ContentGridViewModel : ObservableRecipient, INavigationAware
 {
     private readonly INavigationService _navigationService;
-    private readonly ISampleDataService _sampleDataService;
     private readonly IDataService _dataService;
     private readonly ICommandService _commandService;
 
-    public ICommand ItemClickCommand
+    public ICommand ItemClickCommand { get; }
+
+    public ObservableCollection<TemplateModel> TModelFiltered { get; } = new ObservableCollection<TemplateModel>();
+    public ObservableCollection<TemplateModel> TModel { get; } = new ObservableCollection<TemplateModel>();
+
+    public ObservableCollection<string> TagsFilterSet { get; } = new ObservableCollection<string>() {"All Tags"};
+
+    public ObservableCollection<string> LanguageFilterSet { get; } = new ObservableCollection<string>() { "All Languages", "C#", "F#", "VB" };
+
+
+    private int _tagsComboboxValue = 0;
+
+    public int TagsComboboxValue
     {
-        get;
+        get => _tagsComboboxValue;
+        set => SetProperty(ref _tagsComboboxValue, value);
     }
 
-    public ObservableCollection<SampleOrder> Source { get; } = new ObservableCollection<SampleOrder>();
-    public ObservableCollection<TemplateModel> TModel{ get; } = new ObservableCollection<TemplateModel>();
-    public ContentGridViewModel(INavigationService navigationService, 
-                                ISampleDataService sampleDataService,
+    private int _languageComboboxValue = 0;
+
+    public int LanguageComboboxValue
+    {
+        get => _languageComboboxValue;
+        set => SetProperty(ref _languageComboboxValue, value);
+    }
+
+    public ContentGridViewModel(INavigationService navigationService,
                                 IDataService dataService,
                                 ICommandService commandService)
     {
         _navigationService = navigationService;
-        _sampleDataService = sampleDataService;
         _dataService = dataService;
         _commandService = commandService;
 
@@ -40,17 +56,23 @@ public class ContentGridViewModel : ObservableRecipient, INavigationAware
 
     public async void OnNavigatedTo(object parameter)
     {
-        //Source.Clear();
         TModel.Clear();
-        // TODO: Replace with real data.
-        //var data = await _sampleDataService.GetContentGridDataAsync();
+        TModelFiltered.Clear();
+        TagsFilterSet.Clear();
+        TagsFilterSet.Add("All Tags");
         var _templateTable = await _commandService.ExecuteCommandAsync("dotnet", null, "new", "--list");
         var data = await _dataService.GetTemplateGridDataAsync(_templateTable);
+        
+        foreach (var item in _dataService.TagsSet)
+        {
+            TagsFilterSet.Add(item);
+        }
+
         foreach (var item in data)
         {
             TModel.Add(item);
-            //Source.Add(item);
         }
+        FilteredView();
     }
 
     public void OnNavigatedFrom()
@@ -65,12 +87,50 @@ public class ContentGridViewModel : ObservableRecipient, INavigationAware
             _navigationService.NavigateTo(typeof(ContentGridDetailViewModel).FullName!, clickedItem);
         }
     }
-    //private void OnItemClick(SampleOrder? clickedItem)
-    //{
-    //    if (clickedItem != null)
-    //    {
-    //        _navigationService.SetListDataItemForNextConnectedAnimation(clickedItem);
-    //        _navigationService.NavigateTo(typeof(ContentGridDetailViewModel).FullName!, clickedItem.OrderID);
-    //    }
-    //}
+
+    public void FilteredView()
+    {
+        TModelFiltered.Clear();
+        var tag = TagsFilterSet.ElementAt(TagsComboboxValue);
+        var lang = LanguageFilterSet.ElementAt(LanguageComboboxValue);
+        if (tag.Equals("All Tags") && lang.Equals("All Languages"))
+        {
+            foreach (var item in TModel)
+            {
+                TModelFiltered.Add(item);
+            }
+        }
+        else if(!tag.Equals("All Tags") && lang.Equals("All Languages"))
+        {
+            foreach (var item in TModel)
+            {
+                if (item.Tags.Contains(tag))
+                {
+                    TModelFiltered.Add(item);
+                }
+            }
+        }
+        else if(!lang.Equals("All Languages") && tag.Equals("All Tags"))
+        {
+            foreach (var item in TModel)
+            {
+                if (item.Language.Contains(lang) && !TModelFiltered.Contains(item))
+                {
+                    TModelFiltered.Add(item);
+                }
+            }
+        }
+        else
+        {
+            foreach (var item in TModel)
+            {
+                if (item.Language.Contains(lang) && item.Tags.Contains(tag))
+                {
+                    TModelFiltered.Add(item);
+                }
+            }
+        }
+    }
+
+
 }

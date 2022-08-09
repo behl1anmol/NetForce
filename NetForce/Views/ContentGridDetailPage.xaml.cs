@@ -34,9 +34,9 @@ public sealed partial class ContentGridDetailPage : Page
         {
             var navigationService = App.GetService<INavigationService>();
 
-            if (ViewModel.Item != null)
+            if (ViewModel.TemplateItem != null)
             {
-                navigationService.SetListDataItemForNextConnectedAnimation(ViewModel.Item);
+                navigationService.SetListDataItemForNextConnectedAnimation(ViewModel.TemplateItem);
             }
         }
     }

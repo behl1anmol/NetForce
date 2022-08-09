@@ -8,31 +8,61 @@
     xmlns:controls="using:CommunityToolkit.WinUI.UI.Controls"
     xmlns:models="using:NetForce.Core.Models"
     mc:Ignorable="d">
+    <Grid x:Name="ContentArea" RowSpacing="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="20">
+            <ComboBox x:Name="LanguageCombobox" Header="Language" Width="200" 
+                      SelectedIndex="{x:Bind ViewModel.LanguageComboboxValue, Mode=TwoWay}"
+                       SelectionChanged="{x:Bind ViewModel.FilteredView}" Grid.Row="0">
+                <ComboBoxItem>All Languages</ComboBoxItem>
+                <ComboBoxItem>C#</ComboBoxItem>
+                <ComboBoxItem>F#</ComboBoxItem>
+                <ComboBoxItem>VB</ComboBoxItem>
+            </ComboBox>
+            <ComboBox x:Name="TagsComboBox" ItemsSource="{x:Bind ViewModel.TagsFilterSet}"
+                    Header="Tags" Width="200" SelectedIndex="{x:Bind ViewModel.TagsComboboxValue, Mode=TwoWay}"
+                    Grid.Row="0" SelectionChanged="{x:Bind ViewModel.FilteredView}"/>
+        </StackPanel>
 
-    <Grid x:Name="ContentArea">
         <controls:AdaptiveGridView
             animations:Connected.ListItemElementName="itemThumbnail"
             animations:Connected.ListItemKey="animationKeyContentGrid"
-            DesiredWidth="180"
+            DesiredWidth="300"
             ItemHeight="160"
             IsItemClickEnabled="True"
             ItemClickCommand="{x:Bind ViewModel.ItemClickCommand}"
-            ItemsSource="{x:Bind ViewModel.TModel,Mode=OneWay}"
+            ItemsSource="{x:Bind ViewModel.TModelFiltered,Mode=OneWay}"
             SelectionMode="None"
-            StretchContentForSingleRow="False">
+            StretchContentForSingleRow="False"
+            Grid.Row="2">
+
             <controls:AdaptiveGridView.ItemTemplate>
+
                 <DataTemplate x:DataType="models:TemplateModel">
                     <Grid
                         x:Name="itemThumbnail"
-                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}">
-                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
-                            <!--<FontIcon
-                                Glyph="{x:Bind Symbol}"
-                                AutomationProperties.Name="{x:Bind SymbolName}" />-->
+                        Background="{ThemeResource CardBackgroundFillColorDefault}"
+                        Padding="{StaticResource XSmallLeftTopRightBottomMargin}"
+                        CornerRadius="10"
+                        Margin="5">
+                        <StackPanel 
+                            HorizontalAlignment="Center" 
+                            VerticalAlignment="Center">
+                            <Image Source="/Assets/coding-file.png"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Width="50"
+                                        Height="50"
+                                        Margin="0 0 0 20"/>
                             <TextBlock
                                 Margin="{StaticResource XXSmallTopMargin}"
                                 HorizontalAlignment="Center"
                                 Style="{ThemeResource BodyTextStyle}"
+                                MaxLines="1"
                                 Text="{x:Bind TemplateName}" />
                         </StackPanel>
                     </Grid>
@@ -40,4 +70,5 @@
             </controls:AdaptiveGridView.ItemTemplate>
         </controls:AdaptiveGridView>
     </Grid>
+
 </Page>
