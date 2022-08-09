@@ -6,7 +6,9 @@ namespace NetForce.Core.Services;
 public class DataService : IDataService
 {
     readonly ICommandService _service;
-    private List<TemplateModel> Model { get; } = new List<TemplateModel>(); 
+    private List<TemplateModel> Model { get; } = new List<TemplateModel>();
+
+    public HashSet<string> TagsSet { set; get; } = new HashSet<string>();
 
     public DataService()
     {
@@ -26,13 +28,19 @@ public class DataService : IDataService
             Splitter = new Regex(@"\s\s+");
             _templateRows.ToList().ForEach(_ =>
             {
+                List<string> filterdTags = Splitter.Split(_)[3].ToString().Split('/').ToList();
+                
+                filterdTags.ForEach(_ =>
+                {
+                    TagsSet.Add(_);
+                });
                 Model.Add(new TemplateModel()
                 {
-                    TemplateName = Splitter.Split(_)[0].ToString(),
-                    ShortName = Splitter.Split(_)[1].ToString(),
-                    Language = Splitter.Split(_)[2].ToString(),
-                    Tags = Splitter.Split(_)[3].ToString()
-                });
+                    TemplateName = Splitter.Split(_)[0].ToString().Trim(),
+                    ShortName = Splitter.Split(_)[1].ToString().Trim(),
+                    Language = Splitter.Split(_)[2].ToString().Replace('[', ' ').Replace(']',' ').Trim(),
+                    Tags = string.Join(" ",filterdTags).Trim(),
+                }); ;
             });
         }
         catch (Exception ex)

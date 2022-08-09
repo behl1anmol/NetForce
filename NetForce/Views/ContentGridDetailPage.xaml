@@ -43,12 +43,6 @@
                         VerticalAlignment="Top"
                         RelativePanel.AlignTopWithPanel="True"
                         RelativePanel.AlignLeftWithPanel="True">
-                        <!--<FontIcon
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            FontSize="70"
-                            Glyph="{x:Bind ViewModel.Item.Symbol}"
-                            AutomationProperties.Name="{x:Bind ViewModel.Item.SymbolName}" />-->
                         <Image Source="/Assets/coding-file.png"
                                         HorizontalAlignment="Center"
                                         VerticalAlignment="Center"
@@ -80,8 +74,9 @@
                     <StackPanel x:Name="propertiesGroup2" RelativePanel.Below="propertiesGroup1">
                         <StackPanel x:Name="shipToGroup" Margin="{StaticResource SmallTopMargin}">
                             <TextBlock Style="{ThemeResource SubtitleTextBlockStyle}" Text="Tags" />
-                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.TemplateItem.Tags}" />
+                            <TextBlock Style="{ThemeResource BodyTextBlockStyle}" Text="{x:Bind ViewModel.TemplateItem.Tags}"/>
                         </StackPanel>
+                        
                     </StackPanel>
 
                 </RelativePanel>

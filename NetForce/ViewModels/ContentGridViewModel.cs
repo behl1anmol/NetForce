@@ -17,12 +17,32 @@ public class ContentGridViewModel : ObservableRecipient, INavigationAware
     private readonly IDataService _dataService;
     private readonly ICommandService _commandService;
 
-    public ICommand ItemClickCommand
+    public ICommand ItemClickCommand { get; }
+
+    public ObservableCollection<TemplateModel> TModelFiltered { get; } = new ObservableCollection<TemplateModel>();
+    public ObservableCollection<TemplateModel> TModel { get; } = new ObservableCollection<TemplateModel>();
+
+    public ObservableCollection<string> TagsFilterSet { get; } = new ObservableCollection<string>() {"All Tags"};
+
+    public ObservableCollection<string> LanguageFilterSet { get; } = new ObservableCollection<string>() { "All Languages", "C#", "F#", "VB" };
+
+
+    private int _tagsComboboxValue = 0;
+
+    public int TagsComboboxValue
     {
-        get;
+        get => _tagsComboboxValue;
+        set => SetProperty(ref _tagsComboboxValue, value);
     }
 
-    public ObservableCollection<TemplateModel> TModel { get; } = new ObservableCollection<TemplateModel>();
+    private int _languageComboboxValue = 0;
+
+    public int LanguageComboboxValue
+    {
+        get => _languageComboboxValue;
+        set => SetProperty(ref _languageComboboxValue, value);
+    }
+
     public ContentGridViewModel(INavigationService navigationService,
                                 IDataService dataService,
                                 ICommandService commandService)
@@ -37,12 +57,22 @@ public class ContentGridViewModel : ObservableRecipient, INavigationAware
     public async void OnNavigatedTo(object parameter)
     {
         TModel.Clear();
+        TModelFiltered.Clear();
+        TagsFilterSet.Clear();
+        TagsFilterSet.Add("All Tags");
         var _templateTable = await _commandService.ExecuteCommandAsync("dotnet", null, "new", "--list");
         var data = await _dataService.GetTemplateGridDataAsync(_templateTable);
+        
+        foreach (var item in _dataService.TagsSet)
+        {
+            TagsFilterSet.Add(item);
+        }
+
         foreach (var item in data)
         {
             TModel.Add(item);
         }
+        FilteredView();
     }
 
     public void OnNavigatedFrom()
@@ -57,5 +87,50 @@ public class ContentGridViewModel : ObservableRecipient, INavigationAware
             _navigationService.NavigateTo(typeof(ContentGridDetailViewModel).FullName!, clickedItem);
         }
     }
+
+    public void FilteredView()
+    {
+        TModelFiltered.Clear();
+        var tag = TagsFilterSet.ElementAt(TagsComboboxValue);
+        var lang = LanguageFilterSet.ElementAt(LanguageComboboxValue);
+        if (tag.Equals("All Tags") && lang.Equals("All Languages"))
+        {
+            foreach (var item in TModel)
+            {
+                TModelFiltered.Add(item);
+            }
+        }
+        else if(!tag.Equals("All Tags") && lang.Equals("All Languages"))
+        {
+            foreach (var item in TModel)
+            {
+                if (item.Tags.Contains(tag))
+                {
+                    TModelFiltered.Add(item);
+                }
+            }
+        }
+        else if(!lang.Equals("All Languages") && tag.Equals("All Tags"))
+        {
+            foreach (var item in TModel)
+            {
+                if (item.Language.Contains(lang) && !TModelFiltered.Contains(item))
+                {
+                    TModelFiltered.Add(item);
+                }
+            }
+        }
+        else
+        {
+            foreach (var item in TModel)
+            {
+                if (item.Language.Contains(lang) && item.Tags.Contains(tag))
+                {
+                    TModelFiltered.Add(item);
+                }
+            }
+        }
+    }
+
 
 }
