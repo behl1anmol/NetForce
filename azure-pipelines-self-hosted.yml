@@ -55,6 +55,3 @@ steps:
     scanPath: '$(Build.SourcesDirectory)/NetForce'
     format: 'HTML'
     
-- task: owaspzap@1
-  inputs:
-    aggressivemode: false
