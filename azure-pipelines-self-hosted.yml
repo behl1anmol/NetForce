@@ -54,4 +54,3 @@ steps:
     projectName: 'NetForce'
     scanPath: '$(Build.SourcesDirectory)/NetForce'
     format: 'HTML'
-    
